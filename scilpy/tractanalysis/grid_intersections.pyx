@@ -30,6 +30,38 @@ cdef struct Pointers:
 @cython.wraparound(False)
 @cython.cdivision(True)
 def grid_intersections(streamlines):
+    """ Obtain the points of a grid that are intersected by the input
+    streamlines.
+
+    For example: The streamline below with points in A1, B2, D3 and E5 also
+    implicitly intersects C2, C3, D4, E4. This function will output
+    [A1, B2, C2, C3, D3, D4, E4, E5].
+
+
+	  A   B   C  D   E
+	+---+---+---+---+---+
+   1| X |   |   |   |   |
+	+---+---+---+---+---+
+   2|   | X |   |   |   |
+	+---+---+---+---+---+
+   3|   |   |   | X |   |
+	+---+---+---+---+---+
+   4|   |   |   |   |   |
+	+---+---+---+---+---+
+   5|   |   |   |   | X |
+	+---+---+---+---+---+
+
+    Parameters
+    ----------
+    streamlines : nib.streamlines.array_sequence.ArraySequence
+        The streamlines to intersect with the grid.
+
+    Returns
+    -------
+    new_array_sequence : nib.streamlines.array_sequence.ArraySequence
+        The grid cells intersected by the streamlines.
+    """
+
     cdef:
         cnp.npy_intp nb_streamlines = len(streamlines._lengths)
         cnp.npy_intp at_point = 0
